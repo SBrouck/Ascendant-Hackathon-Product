@@ -78,45 +78,45 @@ export function ParetoChart({ points, selectedName, onSelect }: ParetoChartProps
   };
 
   return (
-    <Card className="relative overflow-hidden rounded-[24px] border border-white/8 bg-white/4 p-6 shadow-soft">
-      <div className="flex flex-wrap items-start justify-between gap-4">
+    <Card className="relative overflow-hidden rounded-[20px] border border-white/8 bg-white/4 p-4 shadow-soft sm:rounded-[24px] sm:p-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
         <div className="space-y-1">
-          <h3 className="text-sm font-medium uppercase tracking-[0.28em] text-muted-foreground/70">Pareto frontier</h3>
-          <p className="text-sm text-muted-foreground/80">
+          <h3 className="text-xs font-medium uppercase tracking-[0.28em] text-muted-foreground/70 sm:text-sm">Pareto frontier</h3>
+          <p className="text-xs text-muted-foreground/80 sm:text-sm">
             Cost Δ vs CVaR95 with bubble size for CLIC coverage and color for inclusive depth.
           </p>
           {groupSelection.length > 1 ? (
-            <p className="text-xs text-muted-foreground/70">
+            <p className="text-[10px] text-muted-foreground/70 sm:text-xs">
               {groupSelection.length} points selected via lasso. Focus to sync KPIs and actions.
             </p>
           ) : null}
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground/70">
-            <Badge className="rounded-full border border-white/10 bg-resilience/15 text-resilience">CLIC bubble</Badge>
-            <Badge className="rounded-full border border-white/10 bg-inclusion/15 text-inclusion">INDEPTH color</Badge>
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+          <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/70 sm:gap-2 sm:text-xs">
+            <Badge className="rounded-full border border-white/10 bg-resilience/15 text-resilience text-[10px] px-2 py-0.5 sm:text-xs">CLIC bubble</Badge>
+            <Badge className="rounded-full border border-white/10 bg-inclusion/15 text-inclusion text-[10px] px-2 py-0.5 sm:text-xs">INDEPTH color</Badge>
           </div>
           <Button
             variant="ghost"
             className={cn(
-              "inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-4 py-2 text-xs",
+              "inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-[10px] sm:px-4 sm:py-2 sm:text-xs",
               focusMode ? "text-foreground" : "text-muted-foreground",
             )}
             onClick={() => setFocusMode((prev) => !prev)}
           >
-            <Target className="h-4 w-4" /> Focus current point
+            <Target className="h-3 w-3 sm:h-4 sm:w-4" /> <span className="hidden sm:inline">Focus current point</span><span className="sm:hidden">Focus</span>
           </Button>
         </div>
       </div>
-      <div className="mt-4 flex flex-wrap gap-2 text-xs text-muted-foreground/70">
+      <div className="mt-3 flex flex-wrap gap-1.5 text-[10px] text-muted-foreground/70 sm:mt-4 sm:gap-2 sm:text-xs">
         {DEPTH_BANDS.map((band) => (
-          <Badge key={band.label} className="gap-2 rounded-full border border-white/10 bg-white/8">
-            <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ backgroundColor: band.color }} aria-hidden />
+          <Badge key={band.label} className="gap-1.5 rounded-full border border-white/10 bg-white/8 px-2 py-0.5 sm:gap-2 sm:px-2.5">
+            <span className="inline-block h-2 w-2 rounded-full sm:h-2.5 sm:w-2.5" style={{ backgroundColor: band.color }} aria-hidden />
             {band.label}
           </Badge>
         ))}
       </div>
-      <div className="mt-6 h-[360px] w-full">
+      <div className="mt-4 h-[280px] w-full sm:mt-6 sm:h-[360px]">
         <ResponsiveContainer>
           <ScatterChart
             ref={chartRef}

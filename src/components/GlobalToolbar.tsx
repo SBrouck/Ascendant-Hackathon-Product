@@ -33,18 +33,18 @@ export function GlobalToolbar({ className }: GlobalToolbarProps) {
   return (
     <div
       className={cn(
-        "sticky top-28 z-40 flex flex-col gap-4 rounded-2xl border border-white/10 bg-panel/95 px-6 py-4 shadow-[0_24px_60px_rgba(10,8,30,0.35)] backdrop-blur-xl",
+        "sticky top-20 z-40 flex flex-col gap-3 rounded-xl border border-white/10 bg-panel/95 px-4 py-3 shadow-[0_24px_60px_rgba(10,8,30,0.35)] backdrop-blur-xl sm:top-28 sm:gap-4 sm:rounded-2xl sm:px-6 sm:py-4",
         className,
       )}
     >
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground/70">Scenario controls</p>
-        <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground/60">
-          <Badge className="rounded-full border border-white/10 bg-iris-500/15 text-iris-300">Inclusive-first</Badge>
-          <Badge className="rounded-full border border-white/10 bg-white/10 text-muted-foreground/80">Synthetic data</Badge>
+      <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+        <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/70 sm:text-xs">Scenario controls</p>
+        <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-muted-foreground/60 sm:gap-2 sm:text-xs">
+          <Badge className="rounded-full border border-white/10 bg-iris-500/15 text-iris-300 text-[10px] px-2 py-0.5 sm:text-xs sm:px-2.5">Inclusive-first</Badge>
+          <Badge className="rounded-full border border-white/10 bg-white/10 text-muted-foreground/80 text-[10px] px-2 py-0.5 sm:text-xs sm:px-2.5">Synthetic data</Badge>
         </div>
       </div>
-      <div className="grid gap-3 md:grid-cols-[repeat(5,minmax(0,1fr))]">
+      <div className="grid gap-2 sm:gap-3 sm:grid-cols-2 md:grid-cols-[repeat(5,minmax(0,1fr))]">
         <ToolbarCard label="Date range">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

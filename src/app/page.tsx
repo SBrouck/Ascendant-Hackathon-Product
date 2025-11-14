@@ -127,27 +127,27 @@ export default function OverviewPage() {
 
   return (
     <div className="space-y-10">
-      <section className="hero-gradient glass-panel-strong overflow-hidden rounded-[26px] px-8 py-12 text-left">
+      <section className="hero-gradient glass-panel-strong overflow-hidden rounded-[20px] px-4 py-8 text-left sm:rounded-[26px] sm:px-8 sm:py-12">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: "easeOut" }}
-          className="max-w-3xl space-y-5"
+          className="max-w-3xl space-y-4 sm:space-y-5"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-4 py-1 text-[11px] uppercase tracking-[0.32em] text-muted-foreground/80">
-            <Radar className="h-3.5 w-3.5 text-iris-300" /> Pareto scenario brief
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[10px] uppercase tracking-[0.32em] text-muted-foreground/80 sm:px-4 sm:text-[11px]">
+            <Radar className="h-3 w-3 text-iris-300 sm:h-3.5 sm:w-3.5" /> Pareto scenario brief
           </span>
-          <h1 className="text-5xl font-semibold leading-tight text-foreground md:text-6xl">
+          <h1 className="text-3xl font-semibold leading-tight text-foreground sm:text-5xl md:text-6xl">
             Resilience and inclusion, engineered on the Pareto frontier.
           </h1>
-          <p className="text-lg text-muted-foreground/90 md:text-xl">
+          <p className="text-base text-muted-foreground/90 sm:text-lg md:text-xl">
             Compare baseline vs optimized awards, surface inclusive risk actions, and export the scenario that keeps your tail in check.
           </p>
-          <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground/80">
-            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/8 px-3 py-1">
-              <ArrowUpRight className="h-3.5 w-3.5 text-iris-300" /> Focus current point to sync tiles and actions
+          <div className="flex flex-col gap-2 text-xs text-muted-foreground/80 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 sm:text-sm">
+            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/8 px-3 py-1.5">
+              <ArrowUpRight className="h-3 w-3 text-iris-300 sm:h-3.5 sm:w-3.5" /> Focus current point to sync tiles and actions
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/8 px-3 py-1">
+            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/8 px-3 py-1.5">
               Agentic run · Synthetic data
             </span>
           </div>
