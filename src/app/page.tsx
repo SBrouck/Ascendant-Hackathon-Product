@@ -1,65 +1,197 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { motion } from "framer-motion";
+import { ArrowUpRight, Radar } from "lucide-react";
+import { GlobalToolbar } from "@/components/GlobalToolbar";
+import { KpiTile } from "@/components/KpiTile";
+import { ParetoChart } from "@/components/ParetoChart";
+import { TopActions } from "@/components/TopActions";
+import { scoreboard, paretoPoints, topActions } from "@/data/seed";
+import { useAppState } from "@/lib/state";
+
+const KPI_CONFIG = [
+  {
+    key: "tailP95",
+    label: "Tail P95",
+    unit: " hrs",
+    help: "Exceeded by only one in twenty deliveries; lower is safer.",
+    goodWhen: "lower" as const,
+    intent: "risk" as const,
+  },
+  {
+    key: "cvar95",
+    label: "CVaR95",
+    unit: " hrs",
+    help: "Average among the worst 5% deliveries.",
+    goodWhen: "lower" as const,
+    intent: "risk" as const,
+  },
+  {
+    key: "dualPct",
+    label: "Dual-sourcing %",
+    unit: "%",
+    help: "Share of site×SKU pairs with two viable suppliers.",
+    goodWhen: "higher" as const,
+    intent: "risk" as const,
+  },
+  {
+    key: "hhi",
+    label: "Site HHI",
+    help: "Herfindahl index for active sites; lower is healthier.",
+    goodWhen: "lower" as const,
+    intent: "risk" as const,
+  },
+  {
+    key: "clic",
+    label: "CLIC %",
+    unit: "%",
+    help: "Inclusive coverage on critical site×SKU pairs.",
+    goodWhen: "higher" as const,
+    intent: "inclusion" as const,
+  },
+  {
+    key: "indepth",
+    label: "INDEPTH",
+    help: "Average count of inclusive suppliers on critical pairs.",
+    goodWhen: "higher" as const,
+    intent: "inclusion" as const,
+  },
+  {
+    key: "costDelta",
+    label: "Landed cost Δ %",
+    unit: "%",
+    help: "Scenario landed cost change vs base.",
+    goodWhen: "lower" as const,
+    intent: "risk" as const,
+  },
+  {
+    key: "co2Delta",
+    label: "CO₂ Δ %",
+    unit: "%",
+    help: "Scope 3 intensity change vs base.",
+    goodWhen: "lower" as const,
+    intent: "risk" as const,
+  },
+] as const;
+
+export default function OverviewPage() {
+  const { selectedPareto, setSelectedPareto, selectedAction, setSelectedAction } = useAppState();
+
+  const highlightRank =
+    selectedAction?.rank ?? (selectedPareto ? (paretoPoints.findIndex((point) => point.name === selectedPareto.name) % topActions.length) + 1 : undefined);
+
+  const kpis = KPI_CONFIG.map((config) => {
+    const metric = scoreboard[config.key as keyof typeof scoreboard];
+    let value = metric.scen;
+    let baseline = metric.base;
+
+    if (selectedPareto) {
+      switch (config.key) {
+        case "cvar95":
+          value = Number(selectedPareto.cvar.toFixed(1));
+          break;
+        case "clic":
+          value = selectedPareto.clic;
+          break;
+        case "indepth":
+          value = Number(selectedPareto.indepth.toFixed(1));
+          break;
+        case "costDelta":
+          value = Number(selectedPareto.costDelta.toFixed(1));
+          baseline = metric.base;
+          break;
+        default:
+          break;
+      }
+    }
+
+    return {
+      label: config.label,
+      unit: config.unit,
+      help: config.help,
+      goodWhen: config.goodWhen,
+      intent: config.intent,
+      value,
+      baseline,
+    };
+  });
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="space-y-10">
+      <section className="hero-gradient glass-panel-strong overflow-hidden rounded-[26px] px-8 py-12 text-left">
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+          className="max-w-3xl space-y-5"
+        >
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-4 py-1 text-[11px] uppercase tracking-[0.32em] text-muted-foreground/80">
+            <Radar className="h-3.5 w-3.5 text-iris-300" /> Pareto scenario brief
+          </span>
+          <h1 className="text-5xl font-semibold leading-tight text-foreground md:text-6xl">
+            Resilience and inclusion, engineered on the Pareto frontier.
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-lg text-muted-foreground/90 md:text-xl">
+            Compare baseline vs optimized awards, surface inclusive risk actions, and export the scenario that keeps your tail in check.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground/80">
+            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/8 px-3 py-1">
+              <ArrowUpRight className="h-3.5 w-3.5 text-iris-300" /> Focus current point to sync tiles and actions
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/8 px-3 py-1">
+              Agentic run · Synthetic data
+            </span>
+          </div>
+        </motion.div>
+      </section>
+
+      <GlobalToolbar />
+
+      <section
+        className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
+        aria-label="Key performance indicators"
+      >
+        {kpis.map((item, index) => (
+          <motion.div
+            key={item.label}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 * index, duration: 0.25, ease: "easeOut" }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            <KpiTile
+              intent={item.intent}
+              label={item.label}
+              value={item.value}
+              baseline={item.baseline}
+              delta={item.value - item.baseline}
+              unit={item.unit}
+              help={item.help}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+          </motion.div>
+        ))}
+      </section>
+
+      <section className="space-y-6">
+        <ParetoChart
+          points={paretoPoints}
+          selectedName={selectedPareto?.name}
+          onSelect={(point) => {
+            setSelectedPareto(point);
+            const pointIndex = paretoPoints.findIndex((p) => p.name === point.name);
+            if (pointIndex >= 0) {
+              const mappedAction = topActions[pointIndex % topActions.length];
+              setSelectedAction(mappedAction);
+            }
+          }}
+        />
+        <TopActions
+          rows={topActions}
+          activeRank={highlightRank}
+          onSendToScenario={(row) => {
+            setSelectedAction(row);
+          }}
+        />
+      </section>
     </div>
   );
 }
