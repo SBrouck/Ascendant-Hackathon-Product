@@ -1,5 +1,7 @@
 {
-  "env": {
-    "PNPM_SKIP_BUILD_CHECKS": "true"
+  "build": {
+    "env": {
+      "PNPM_SKIP_BUILD_CHECKS": "true"
+    }
   }
 }
