@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { type ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -38,18 +37,15 @@ export function AppShell({ children }: AppShellProps) {
         <header className="sticky top-6 z-50">
           <div className="glass-panel-strong hero-gradient flex items-center justify-between gap-6 rounded-[18px] border border-white/8 px-6 py-4 shadow-soft backdrop-blur-xl">
             <Link href="/" className="flex items-center gap-3">
-              <div className="relative h-11 w-11 flex-shrink-0 overflow-hidden">
-                <Image
-                  src="/LOGOV0.png"
-                  alt="Pareto logo"
-                  width={44}
-                  height={44}
-                  className="h-full w-full object-contain"
-                  priority
-                  unoptimized
-                  style={{ display: "block" }}
-                />
-              </div>
+              <img
+                src="/LOGOV0.png"
+                alt="Pareto logo"
+                className="h-11 w-11 flex-shrink-0 object-contain"
+                onError={(e) => {
+                  console.error("Logo failed to load:", e);
+                  (e.target as HTMLImageElement).style.display = "none";
+                }}
+              />
               <div>
                 <p className="text-lg font-semibold text-foreground">Pareto</p>
                 <p className="text-xs uppercase tracking-[0.32em] text-muted-foreground/80">Agentic supply intelligence</p>
