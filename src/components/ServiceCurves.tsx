@@ -27,8 +27,8 @@ export type TtrBucket = {
 };
 
 type ServiceCurvesProps = {
-  series: ServiceCurvePoint[];
-  histogram: TtrBucket[];
+  series: ReadonlyArray<ServiceCurvePoint>;
+  histogram: ReadonlyArray<TtrBucket>;
   className?: string;
 };
 
