@@ -161,7 +161,10 @@ export const topActions = [
   },
 ];
 
-export const serviceCurves = {
+export const serviceCurves: {
+  series: { day: number; baseline: number; scenario: number }[];
+  ttrBuckets: { bucket: string; baseline: number; scenario: number }[];
+} = {
   series: [
     { day: 0, baseline: 58, scenario: 58 },
     { day: 2, baseline: 54, scenario: 56 },
@@ -182,7 +185,7 @@ export const serviceCurves = {
     { bucket: "6-7d", baseline: 24, scenario: 18 },
     { bucket: ">7d", baseline: 18, scenario: 12 },
   ],
-} as const;
+};
 
 const awardSites = [
   "Lyon 02",
