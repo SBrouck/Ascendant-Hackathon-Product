@@ -38,7 +38,7 @@ export function AppShell({ children }: AppShellProps) {
           <div className="glass-panel-strong hero-gradient flex items-center justify-between gap-6 rounded-[18px] border border-white/8 px-6 py-4 shadow-soft backdrop-blur-xl">
             <Link href="/" className="flex items-center gap-3">
               <img
-                src="/LOGOV0.png"
+                src="/dff1725e4e1a7aaba55a70695693080dc10e306f5196afd47c30522fe8ffb648.tiff"
                 alt="Pareto logo"
                 className="h-11 w-11 flex-shrink-0 object-contain"
                 onError={(e) => {
