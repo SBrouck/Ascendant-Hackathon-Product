@@ -82,8 +82,8 @@ export default function OverviewPage() {
 
   const kpis = KPI_CONFIG.map((config) => {
     const metric = scoreboard[config.key as keyof typeof scoreboard];
-    let value = metric.scen;
-    let baseline = metric.base;
+    let value = Number(metric.scen);
+    let baseline = Number(metric.base);
 
     if (selectedPareto) {
       switch (config.key) {
@@ -91,14 +91,14 @@ export default function OverviewPage() {
           value = Number(selectedPareto.cvar.toFixed(1));
           break;
         case "clic":
-          value = selectedPareto.clic;
+          value = Number(selectedPareto.clic);
           break;
         case "indepth":
           value = Number(selectedPareto.indepth.toFixed(1));
           break;
         case "costDelta":
           value = Number(selectedPareto.costDelta.toFixed(1));
-          baseline = metric.base;
+          baseline = Number(metric.base);
           break;
         default:
           break;
