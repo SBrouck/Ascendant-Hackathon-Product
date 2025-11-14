@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { CheckCircle2, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type AgentStep = {
@@ -31,10 +32,20 @@ const DEFAULT_STEPS: AgentStep[] = [
 
 export function AgentTimeline({ steps = DEFAULT_STEPS, className }: AgentTimelineProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [showTransition, setShowTransition] = useState(false);
+  const [prevIndex, setPrevIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % steps.length);
+      setActiveIndex((prev) => {
+        const next = (prev + 1) % steps.length;
+        if (next > prev) {
+          setPrevIndex(prev);
+          setShowTransition(true);
+          setTimeout(() => setShowTransition(false), 800);
+        }
+        return next;
+      });
     }, 2400);
     return () => clearInterval(interval);
   }, [steps.length]);
@@ -63,7 +74,7 @@ export function AgentTimeline({ steps = DEFAULT_STEPS, className }: AgentTimelin
         </Badge>
       </div>
       <div className="mt-6">
-        <div className="relative mb-6">
+        <div className="relative mb-6 overflow-x-auto pb-2">
           <div className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-white/10" aria-hidden />
           <motion.div
             className="absolute left-0 top-1/2 h-px -translate-y-1/2 bg-iris-500"
@@ -71,26 +82,99 @@ export function AgentTimeline({ steps = DEFAULT_STEPS, className }: AgentTimelin
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
           />
-          <div className="relative flex flex-wrap items-center justify-between gap-3">
+          <div className="relative flex flex-nowrap items-center gap-2 min-w-max">
             {steps.map((step, index) => {
               const state = index === activeIndex ? "active" : index < activeIndex ? "complete" : "pending";
+              const isTransitioning = showTransition && index === prevIndex;
+              const showArrow = showTransition && index === prevIndex && index < steps.length - 1;
+              
               return (
-                <button
-                  key={step.id}
-                  type="button"
-                  className={cn(
-                    "relative flex min-w-[90px] flex-col items-center gap-1 rounded-full border px-3 py-2 text-xs transition",
-                    state === "complete"
-                      ? "border-resilience/40 bg-resilience/10 text-resilience"
-                      : state === "active"
-                        ? "border-iris-500/60 bg-iris-500/15 text-foreground"
-                        : "border-white/10 bg-white/5 text-muted-foreground/70",
+                <div key={step.id} className="relative flex items-center">
+                  <button
+                    type="button"
+                    className={cn(
+                      "relative flex min-w-[90px] flex-col items-center gap-1 rounded-full border px-3 py-2 text-xs transition-all duration-300",
+                      state === "complete"
+                        ? "border-success/50 bg-success/15 text-success shadow-[0_0_12px_rgba(61,220,151,0.2)]"
+                        : state === "active"
+                          ? "border-iris-500/60 bg-iris-500/15 text-foreground shadow-[0_0_16px_rgba(108,93,211,0.3)] scale-105"
+                          : "border-white/10 bg-white/5 text-muted-foreground/70",
+                      isTransitioning && "animate-pulse"
+                    )}
+                    onClick={() => setActiveIndex(index)}
+                  >
+                    {state === "complete" && (
+                      <motion.div
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                        className="absolute -right-1 -top-1"
+                      >
+                        <CheckCircle2 className="h-4 w-4 text-success" />
+                      </motion.div>
+                    )}
+                    <span className="font-medium tracking-wide">{step.label}</span>
+                    <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">Step {index + 1}</span>
+                    {state === "active" && (
+                      <motion.div
+                        className="absolute inset-0 rounded-full border-2 border-iris-500"
+                        animate={{
+                          scale: [1, 1.15, 1],
+                          opacity: [0.5, 0, 0.5],
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      />
+                    )}
+                  </button>
+                  
+                  {index < steps.length - 1 && (
+                    <div className="relative mx-1 flex h-8 w-8 items-center justify-center">
+                      <div className="h-px w-6 bg-white/10" />
+                      <AnimatePresence>
+                        {showArrow && (
+                          <motion.div
+                            initial={{ scale: 0, opacity: 0, x: -8 }}
+                            animate={{ scale: 1, opacity: 1, x: 0 }}
+                            exit={{ scale: 0, opacity: 0, x: 8 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                            className="absolute"
+                          >
+                            <motion.div
+                              animate={{
+                                x: [0, 4, 0],
+                              }}
+                              transition={{
+                                duration: 0.6,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                              }}
+                            >
+                              <ArrowRight className="h-5 w-5 text-success drop-shadow-[0_0_8px_rgba(61,220,151,0.6)]" />
+                            </motion.div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                      {!showArrow && (
+                        <motion.div
+                          className="absolute h-2 w-2 rounded-full bg-white/20"
+                          animate={{
+                            scale: [1, 1.2, 1],
+                            opacity: [0.4, 0.6, 0.4],
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          }}
+                        />
+                      )}
+                    </div>
                   )}
-                  onClick={() => setActiveIndex(index)}
-                >
-                  <span className="font-medium tracking-wide">{step.label}</span>
-                  <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60">Step {index + 1}</span>
-                </button>
+                </div>
               );
             })}
           </div>
