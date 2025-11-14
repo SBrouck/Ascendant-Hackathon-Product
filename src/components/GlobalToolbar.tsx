@@ -33,7 +33,7 @@ export function GlobalToolbar({ className }: GlobalToolbarProps) {
   return (
     <div
       className={cn(
-        "sticky top-28 z-40 flex flex-col gap-4 rounded-2xl border border-white/6 bg-white/4 px-6 py-4 shadow-[0_24px_60px_rgba(10,8,30,0.35)] backdrop-blur-xl",
+        "sticky top-28 z-40 flex flex-col gap-4 rounded-2xl border border-white/10 bg-panel/95 px-6 py-4 shadow-[0_24px_60px_rgba(10,8,30,0.35)] backdrop-blur-xl",
         className,
       )}
     >
@@ -131,7 +131,7 @@ type ToolbarCardProps = {
 
 function ToolbarCard({ label, children }: ToolbarCardProps) {
   return (
-    <div className="flex flex-col gap-2 rounded-xl border border-white/6 bg-white/4 p-3 text-sm text-foreground/90">
+    <div className="flex flex-col gap-2 rounded-xl border border-white/10 bg-white/8 p-3 text-sm text-foreground/90">
       <span className="text-[11px] uppercase tracking-[0.28em] text-muted-foreground/70">{label}</span>
       {children}
     </div>

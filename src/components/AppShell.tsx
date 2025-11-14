@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { type ReactNode } from "react";
-import { Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -38,8 +38,14 @@ export function AppShell({ children }: AppShellProps) {
         <header className="sticky top-6 z-50">
           <div className="glass-panel-strong hero-gradient flex items-center justify-between gap-6 rounded-[18px] border border-white/8 px-6 py-4 shadow-soft backdrop-blur-xl">
             <Link href="/" className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-iris-500/20 text-iris-300">
-                <Sparkles className="h-5 w-5" />
+              <div className="relative h-11 w-11 flex-shrink-0">
+                <Image
+                  src="/LOGOV0.png"
+                  alt="Pareto logo"
+                  fill
+                  className="object-contain"
+                  priority
+                />
               </div>
               <div>
                 <p className="text-lg font-semibold text-foreground">Pareto</p>

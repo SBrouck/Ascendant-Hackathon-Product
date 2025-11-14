@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Info, TrendingDown, TrendingUp } from "lucide-react";
+import { TrendingDown, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -124,12 +124,6 @@ export function KpiTile({
                   />
                 </svg>
               </div>
-              <button
-                className="absolute right-4 top-4 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-white/10 text-[11px] text-muted-foreground transition hover:text-foreground"
-                aria-label={`What is ${label}`}
-              >
-                <Info className="h-3.5 w-3.5" />
-              </button>
             </Card>
           </motion.div>
         </TooltipTrigger>

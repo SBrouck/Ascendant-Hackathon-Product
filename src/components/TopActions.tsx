@@ -156,7 +156,7 @@ export function TopActions({ rows, onSendToScenario, loading, activeRank, classN
       </ScrollArea>
 
       <Sheet open={!!selectedRow} onOpenChange={(open) => !open && setSelectedRow(null)}>
-        <SheetContent side="right" className="w-[420px] border-l border-white/10 bg-panel-strong/95">
+        <SheetContent side="right" className="w-[420px] border-l border-white/10 bg-panel/98 backdrop-blur-xl">
           {selectedRow ? (
             <div className="flex h-full flex-col">
               <SheetHeader className="pb-4">
