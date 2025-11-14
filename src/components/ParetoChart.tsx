@@ -33,13 +33,6 @@ type ParetoChartProps = {
   onSelect?: (point: ParetoPoint) => void;
 };
 
-type ScatterChartState = {
-  state?: {
-    xAxisMap?: Record<string, { scale: { invert: (value: number) => number } }>;
-    yAxisMap?: Record<string, { scale: { invert: (value: number) => number } }>;
-  };
-};
-
 const DEPTH_BANDS = [
   { limit: 0.9, label: "Sparse", color: "#ff6b6b" },
   { limit: 1.2, label: "Emerging", color: "#f5b971" },
@@ -52,7 +45,7 @@ function getBand(value: number) {
 }
 
 export function ParetoChart({ points, selectedName, onSelect }: ParetoChartProps) {
-  const chartRef = useRef<ScatterChartState | null>(null);
+  const chartRef = useRef<any>(null);
   const [focusMode, setFocusMode] = useState(false);
   const [lasso, setLasso] = useState<{ x1: number; y1: number; x2: number; y2: number } | null>(null);
   const [groupSelection, setGroupSelection] = useState<ParetoPoint[]>([]);
@@ -130,29 +123,31 @@ export function ParetoChart({ points, selectedName, onSelect }: ParetoChartProps
             margin={{ top: 20, right: 24, bottom: 24, left: 24 }}
             onMouseDown={(event) => {
               if (!event || focusMode) return;
+              const pointer = event as any;
               const state = chartRef.current?.state;
               const xScale = state?.xAxisMap?.[0]?.scale;
               const yScale = state?.yAxisMap?.[0]?.scale;
-              if (!xScale || !yScale) return;
+              if (!xScale || !yScale || pointer?.chartX === undefined || pointer?.chartY === undefined) return;
               setLasso({
-                x1: xScale.invert(event.chartX),
-                y1: yScale.invert(event.chartY),
-                x2: xScale.invert(event.chartX),
-                y2: yScale.invert(event.chartY),
+                x1: xScale.invert(pointer.chartX),
+                y1: yScale.invert(pointer.chartY),
+                x2: xScale.invert(pointer.chartX),
+                y2: yScale.invert(pointer.chartY),
               });
             }}
             onMouseMove={(event) => {
               if (!event || !lasso) return;
+              const pointer = event as any;
               const state = chartRef.current?.state;
               const xScale = state?.xAxisMap?.[0]?.scale;
               const yScale = state?.yAxisMap?.[0]?.scale;
-              if (!xScale || !yScale) return;
+              if (!xScale || !yScale || pointer?.chartX === undefined || pointer?.chartY === undefined) return;
               setLasso((prev) =>
                 prev
                   ? {
                       ...prev,
-                      x2: xScale.invert(event.chartX),
-                      y2: yScale.invert(event.chartY),
+                      x2: xScale.invert(pointer.chartX),
+                      y2: yScale.invert(pointer.chartY),
                     }
                   : prev,
               );
@@ -226,10 +221,11 @@ export function ParetoChart({ points, selectedName, onSelect }: ParetoChartProps
             <Scatter
               data={sortedPoints}
               fill="#6c5dd3"
-              shape={(props) => {
-                const { cx, cy, payload } = props as typeof props & { payload: ParetoPoint };
+              shape={(props: any) => {
+                const pointer = props as typeof props & { payload: ParetoPoint };
+                const { cx, cy, payload } = pointer;
                 if (typeof cx !== "number" || typeof cy !== "number" || !payload) {
-                  return null;
+                  return <></>;
                 }
                 const band = getBand(payload.indepth);
                 const isSelected = payload.name === selectedName;
@@ -256,9 +252,7 @@ export function ParetoChart({ points, selectedName, onSelect }: ParetoChartProps
                       stroke={band.color}
                       strokeWidth={isSelected ? 3 : 1.4}
                     />
-                    {isSelected ? (
-                      <circle cx={cx} cy={cy} r={size / 2 + 4} stroke={band.color} strokeWidth={1.4} fill="none" />
-                    ) : null}
+                    {isSelected ? <circle cx={cx} cy={cy} r={size / 2 + 4} stroke={band.color} strokeWidth={1.4} fill="none" /> : null}
                   </g>
                 );
               }}
