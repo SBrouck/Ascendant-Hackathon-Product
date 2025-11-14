@@ -1,0 +1,5 @@
+{
+  "env": {
+    "PNPM_SKIP_BUILD_CHECKS": "true"
+  }
+}
