@@ -40,7 +40,7 @@ export function AppShell({ children }: AppShellProps) {
               <img
                 src="/dff1725e4e1a7aaba55a70695693080dc10e306f5196afd47c30522fe8ffb648.tiff"
                 alt="Pareto logo"
-                className="h-11 w-11 flex-shrink-0 object-contain"
+                className="h-14 w-14 flex-shrink-0 object-contain"
                 onError={(e) => {
                   console.error("Logo failed to load:", e);
                   (e.target as HTMLImageElement).style.display = "none";
