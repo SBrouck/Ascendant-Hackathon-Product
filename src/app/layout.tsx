@@ -16,7 +16,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Pareto — Agentic Procurement Visuals",
+  title: "Pareto - Agentic Supply Intelligence",
   description:
     "Synthetic scenario intelligence environment showing inclusive supply risk and awards.",
 };

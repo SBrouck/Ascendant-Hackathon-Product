@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { type ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -39,12 +38,10 @@ export function AppShell({ children }: AppShellProps) {
           <div className="glass-panel-strong hero-gradient flex items-center justify-between gap-6 rounded-[18px] border border-white/8 px-6 py-4 shadow-soft backdrop-blur-xl">
             <Link href="/" className="flex items-center gap-3">
               <div className="relative h-11 w-11 flex-shrink-0">
-                <Image
+                <img
                   src="/LOGOV0.png"
                   alt="Pareto logo"
-                  fill
-                  className="object-contain"
-                  priority
+                  className="h-full w-full object-contain"
                 />
               </div>
               <div>
