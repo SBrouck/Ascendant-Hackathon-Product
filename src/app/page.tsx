@@ -9,7 +9,16 @@ import { TopActions } from "@/components/TopActions";
 import { scoreboard, paretoPoints, topActions } from "@/data/seed";
 import { useAppState } from "@/lib/state";
 
-const KPI_CONFIG = [
+type KpiConfig = {
+  key: keyof typeof scoreboard;
+  label: string;
+  unit?: string;
+  help: string;
+  goodWhen: "higher" | "lower";
+  intent: "risk" | "inclusion";
+};
+
+const KPI_CONFIG: Readonly<KpiConfig[]> = [
   {
     key: "tailP95",
     label: "Tail P95",
